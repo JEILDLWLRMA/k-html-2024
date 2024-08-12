@@ -1,5 +1,6 @@
 import { Switch, Route } from 'wouter'
 
+import './reset.css'
 import './font.css'
 
 export function App() {
