@@ -2,6 +2,7 @@ import { Theme } from '@radix-ui/themes'
 import { Switch, Route } from 'wouter'
 
 import '@radix-ui/themes/styles.css'
+import './font.css'
 
 export function App() {
   return (
