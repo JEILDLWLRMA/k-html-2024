@@ -274,7 +274,7 @@ export function Analysis() {
     setLoadingStatus(false)
 
     if (response.ok) {
-      setResult((await response.json()).answer.replaceAll(/【.*】/g, ''))
+      setResult((await response.json()).answers.replaceAll(/【.*】/g, ''))
     } else {
       setError(true)
     }
