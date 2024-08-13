@@ -181,6 +181,14 @@ const AnalysisStyle = {
     flex-direction: column;
     
     height: 92%;
+    
+    align-self: center;
+    
+    @media (min-width: 1024px) {
+      width: 60%;
+      max-width: 750px;
+      height: 85%;
+    }
   `,
   spinnerBox: css`
     display: flex;
