@@ -83,6 +83,8 @@ const SideBarStyle = {
   menu2: css`
     cursor: pointer;
     width: 1rem;
+    justify-self: end;
+    margin-right: 1.2rem;
   `,
 };
 const menuBoxStyle = {
@@ -129,7 +131,7 @@ function MenuBox() {
   );
 }
 
-function SlideBar({ MenuBox }) {
+function SlideBar({ MenuBox, history = [1, 2] }) {
   const [openMenus, setOpenMenus] = useState([false, false]);
 
   const handleClickMenu = (index) => {
@@ -159,7 +161,7 @@ function SlideBar({ MenuBox }) {
       <div css={SideBarStyle.title}>상담 기록</div>
 
       <div>
-        {[1, 2].map((item, index) => (
+        {history.map((item, index) => (
           <div key={index} css={SideBarStyle.contentBox}>
             <div css={SideBarStyle.Selected}>진로 상담 {item}</div>
             <img src={menu2} css={SideBarStyle.menu2} onClick={() => handleClickMenu(index)} alt="menu" />
