@@ -41,6 +41,8 @@ const PostingImgStyle = {
     opacity: 0.6;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     position: relative;
+    width: 100%;
+    height: 15.5rem;
   `,
   titleBox: css`
     position: absolute;
@@ -62,20 +64,20 @@ const PostingImgStyle = {
     font-weight: 900;
   `,
 };
-function PostingImg() {
+function PostingImg({ title, titleImg, place }) {
   return (
     <div>
-      <img src={postingImg} css={PostingImgStyle.image} />
+      <img src={titleImg} css={PostingImgStyle.image} />
       <div>
         <div css={PostingImgStyle.titleBox}>
-          <div css={PostingImgStyle.title}>견학 활동 1</div>
+          <div css={PostingImgStyle.title}>{title}</div>
           <div
             css={css`
               display: flex;
             `}
           >
             <div css={PostingImgStyle.close}>모집완료</div>
-            <div css={PostingImgStyle.place}>처인구</div>
+            <div css={PostingImgStyle.place}>{place}</div>
           </div>
         </div>
       </div>
@@ -112,7 +114,7 @@ const GreenBoxStyle = {
   `,
 };
 
-function GreenBox() {
+function GreenBox({ date, deadline }) {
   return (
     <div
       css={css`
@@ -123,11 +125,11 @@ function GreenBox() {
       `}
     >
       <div css={GreenBoxStyle.box1}>
-        <div>일시 2024년 8월 13일 | 모집 인원 00명</div>
+        <div>일시 {date} | 모집 인원 00명</div>
       </div>
       <div css={GreenBoxStyle.box2}>
         <div css={GreenBoxStyle.period}>모집 기간</div>
-        <div>2024년 6월 10일 ~ 2024년 8월 10일까지</div>
+        <div>{deadline}</div>
       </div>
     </div>
   );
@@ -144,7 +146,7 @@ const GrayBoxStyle = {
   `,
 };
 
-function GrayBox() {
+function GrayBox({ content }) {
   return (
     <div
       css={css`
@@ -152,15 +154,7 @@ function GrayBox() {
         justify-content: center;
       `}
     >
-      <div css={GrayBoxStyle.box}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit amet ad vitae animi deleniti, excepturi similique alias sequi ullam
-        provident doloremque aspernatur voluptas ducimus, facere at veritatis perspiciatis assumenda. Accusantium. provident doloremque
-        aspernatur voluptas ducimus, facere at veritatis perspiciatis assumenda. Accusantium. provident doloremque aspernatur voluptas
-        ducimus, facere at veritatis perspiciatis assumenda. Accusantium. ipisicing elit. Impedit amet ad vitae animi deleniti, excepturi
-        similique alias sequi ullam provident doloremque aspernatur voluptas ducimus, facere at veritatis perspiciatis assumenda.
-        Accusantium. provident doloremque aspernatur voluptas ducimus, facere at veritatis perspiciatis assumenda. Accusantium. provident
-        doloremque aspernatur voluptas ducimus, facere at veritatis perspiciatis assumenda. Accusantium.
-      </div>
+      <div css={GrayBoxStyle.box}>{content}</div>
     </div>
   );
 }
@@ -203,12 +197,14 @@ function Btn() {
 }
 
 export function PostingClose() {
+  const { title, place, date, deadline, content, titleImg } = history.state;
+
   return (
     <div>
       <Header />
-      <PostingImg />
-      <GreenBox />
-      <GrayBox />
+      <PostingImg title={title} titleImg={titleImg} place={place} />
+      <GreenBox date={date} deadline={deadline} />
+      <GrayBox content={content} />
       <Btn />
     </div>
   );

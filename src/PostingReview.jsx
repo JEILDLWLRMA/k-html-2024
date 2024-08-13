@@ -43,6 +43,8 @@ const PostingImgStyle = {
     opacity: 0.6;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
     position: relative;
+    height: 15.5rem;
+    width: 100%;
   `,
   titleBox: css`
     position: absolute;
@@ -63,20 +65,20 @@ const PostingImgStyle = {
     font-weight: 900;
   `,
 };
-function PostingImg() {
+function PostingImg({ title, titleImg, place, writer }) {
   return (
     <div>
-      <img src={postingImg} css={PostingImgStyle.image} />
+      <img src={titleImg} css={PostingImgStyle.image} />
       <div>
         <div css={PostingImgStyle.titleBox}>
-          <div css={PostingImgStyle.title}>견학 활동 1</div>
+          <div css={PostingImgStyle.title}>{title}</div>
           <div
             css={css`
               display: flex;
             `}
           >
-            <div css={PostingImgStyle.close}>글쓴이</div>
-            <div css={PostingImgStyle.place}>처인구</div>
+            <div css={PostingImgStyle.close}>{writer}</div>
+            <div css={PostingImgStyle.place}>{place}</div>
           </div>
         </div>
       </div>
@@ -140,7 +142,7 @@ const GrayBoxStyle = {
   `,
 };
 
-function GrayBox() {
+function GrayBox({ content }) {
   return (
     <div
       css={css`
@@ -148,15 +150,7 @@ function GrayBox() {
         justify-content: center;
       `}
     >
-      <div css={GrayBoxStyle.box}>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit amet ad vitae animi deleniti, excepturi similique alias sequi ullam
-        provident doloremque aspernatur voluptas ducimus, facere at veritatis perspiciatis assumenda. Accusantium. provident doloremque
-        aspernatur voluptas ducimus, facere at veritatis perspiciatis assumenda. Accusantium. provident doloremque aspernatur voluptas
-        ducimus, facere at veritatis perspiciatis assumenda. Accusantium. ipisicing elit. Impedit amet ad vitae animi deleniti, excepturi
-        similique alias sequi ullam provident doloremque aspernatur voluptas ducimus, facere at veritatis perspiciatis assumenda.
-        Accusantium. provident doloremque aspernatur voluptas ducimus, facere at veritatis perspiciatis assumenda. Accusantium. provident
-        doloremque aspernatur voluptas ducimus, facere at veritatis perspiciatis assumenda. Accusantium.
-      </div>
+      <div css={GrayBoxStyle.box}>{content}</div>
     </div>
   );
 }
@@ -199,12 +193,14 @@ function Btn() {
 }
 
 export function PostingReview() {
+  const { title, place, date, deadline, content, titleImg, writer } = history.state;
+
   return (
     <div>
       <Header />
-      <PostingImg />
-      <GreenBox />
-      <GrayBox />
+      <PostingImg title={title} titleImg={titleImg} place={place} writer={writer} />
+      <GreenBox date={date} deadline={deadline} />
+      <GrayBox content={content} />
       <Btn />
     </div>
   );

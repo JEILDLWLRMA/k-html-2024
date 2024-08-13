@@ -1,15 +1,27 @@
-import React, { useState } from "react";
-import { Link } from "wouter";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "wouter";
 import { css } from "@emotion/react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { apiCallMaker } from "./apiRoot.js";
 import { accent, gray2, gray1, gray5 } from "./colors.js";
 
 import arrow from "./assets/arrow-up.png";
 import banner from "./assets/banner.png";
 import postingAvatar from "./assets/postingAvatar.png";
-import heart from "./assets/heart.png";
+import { firstData, secondData, thirdData, fourthData } from "./api.js";
+
+const goToPosting = (navigate) => (data) => {
+  console.log(data);
+  if (data.available || data.id[0] === "C") {
+    navigate("/posting-open", { state: data });
+  } else if (data.review) {
+    navigate("/posting-review", { state: data });
+  } else {
+    navigate("/posting-close", { state: data });
+  }
+};
 
 const HeaderStyle = {
   header: css`
@@ -144,6 +156,8 @@ function GreenBox() {
 const cardStyle = {
   image: css`
     width: 10rem;
+    height: 6rem; /* 고정된 높이 추가 */
+    object-fit: cover; /* 이미지가 컨테이너를 덮으며 넘치는 부분 잘라내기 */
     box-shadow: 0 5px 7px rgba(0, 0, 0, 0.5);
     margin-bottom: 1rem;
   `,
@@ -163,16 +177,14 @@ const cardStyle = {
 
 function Card({ value }) {
   return (
-    <Link to={value.link} asChild>
-      <div>
-        <img src={value.titleImg} css={cardStyle.image} />
-        <div css={cardStyle.title}>{value.title}</div>
-        <div css={cardStyle.box}>
-          <div css={cardStyle.detail}>{value.date}</div>
-          <div css={cardStyle.detail}>{value.place}</div>
-        </div>
+    <div>
+      <img src={value.titleImg} css={cardStyle.image} />
+      <div css={cardStyle.title}>{value.title}</div>
+      <div css={cardStyle.box}>
+        <div css={cardStyle.detail}>{value.date}</div>
+        <div css={cardStyle.detail}>{value.location}</div>
       </div>
-    </Link>
+    </div>
   );
 }
 
@@ -196,7 +208,29 @@ const slideBoxStyle = {
   `,
 };
 
-function SlideBox1({ Card }) {
+function SlideBox1({ Card, goToPosting }) {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+  const [, navigate] = useLocation();
+
+  useEffect(() => {
+    fetch(apiCallMaker("/api/field-trips/"), { method: "POST" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setData(data);
+        console.log("[1]: ", data);
+      })
+      .catch((error) => {
+        setError(error);
+        return <div>Error: {error.message}</div>;
+      });
+  }, []);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -207,10 +241,6 @@ function SlideBox1({ Card }) {
     autoplay: true, // 자동 슬라이드 설정
     autoplaySpeed: 1600, // 슬라이드 전환 속도 설정
   };
-  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구", link: "/posting-open" };
-  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
-  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
-  const info = [info1, info2, info3];
 
   return (
     <div
@@ -219,12 +249,16 @@ function SlideBox1({ Card }) {
         margin-top: 2.5rem;
       `}
     >
-      <div css={slideBoxStyle.title}>{info1.job} 관련 견학 활동</div>
+      <div css={slideBoxStyle.title}>진로 관련 견학 활동</div>
       <div css={slideBoxStyle.moreBtn}>더보기</div>
       <div css={slideBoxStyle.sliderContainer}>
         <Slider {...settings}>
-          {info.map((value, idx) => {
-            return <Card value={value} key={idx} />;
+          {firstData.map((value, idx) => {
+            return (
+              <div key={idx} onClick={() => goToPosting(value)}>
+                <Card value={value} />
+              </div>
+            );
           })}
         </Slider>
       </div>
@@ -233,7 +267,29 @@ function SlideBox1({ Card }) {
   );
 }
 
-function SlideBox2({ Card }) {
+function SlideBox2({ Card, goToPosting }) {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch(apiCallMaker("/api/field-trips/current/"), { method: "POST" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        setData(data);
+        console.log("[2]: ", data);
+      })
+      .catch((error) => {
+        setError(error);
+        return <div>Error: {error.message}</div>;
+      });
+  }, []);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -244,10 +300,6 @@ function SlideBox2({ Card }) {
     autoplay: true, // 자동 슬라이드 설정
     autoplaySpeed: 2000, // 슬라이드 전환 속도 설정
   };
-  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구", link: "/posting-open" };
-  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
-  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
-  const info = [info1, info2, info3];
 
   return (
     <div
@@ -260,8 +312,12 @@ function SlideBox2({ Card }) {
       <div css={slideBoxStyle.moreBtn}>더보기</div>
       <div css={slideBoxStyle.sliderContainer}>
         <Slider {...settings}>
-          {info.map((value, idx) => {
-            return <Card value={value} key={idx} />;
+          {secondData.map((value, idx) => {
+            return (
+              <div key={idx} onClick={() => goToPosting(value)}>
+                <Card value={value} />
+              </div>
+            );
           })}
         </Slider>
       </div>
@@ -270,7 +326,28 @@ function SlideBox2({ Card }) {
   );
 }
 
-function SlideBox3({ Card }) {
+function SlideBox3({ Card, goToPosting }) {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch(apiCallMaker("/api/field-trips/completed/"), { method: "POST" })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setData(data);
+        console.log("[3]: ", data);
+      })
+      .catch((error) => {
+        setError(error);
+        return <div>Error: {error.message}</div>;
+      });
+  }, []);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -281,10 +358,6 @@ function SlideBox3({ Card }) {
     autoplay: true, // 자동 슬라이드 설정
     autoplaySpeed: 1200, // 슬라이드 전환 속도 설정
   };
-  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구", link: "/posting-open" };
-  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
-  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
-  const info = [info1, info2, info3];
 
   return (
     <div
@@ -297,8 +370,12 @@ function SlideBox3({ Card }) {
       <div css={slideBoxStyle.moreBtn}>더보기</div>
       <div css={slideBoxStyle.sliderContainer}>
         <Slider {...settings}>
-          {info.map((value, idx) => {
-            return <Card value={value} key={idx} />;
+          {thirdData.map((value, idx) => {
+            return (
+              <div key={idx} onClick={() => goToPosting(value)}>
+                <Card value={value} />
+              </div>
+            );
           })}
         </Slider>
       </div>
@@ -307,7 +384,9 @@ function SlideBox3({ Card }) {
   );
 }
 
-function SlideBox4({ Card }) {
+function SlideBox4({ Card, goToPosting }) {
+  const [data, setData] = useState(fourthData);
+
   const settings = {
     dots: false,
     infinite: true,
@@ -318,10 +397,6 @@ function SlideBox4({ Card }) {
     autoplay: true, // 자동 슬라이드 설정
     autoplaySpeed: 2400, // 슬라이드 전환 속도 설정
   };
-  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구", link: "/posting-open" };
-  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
-  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
-  const info = [info1, info2, info3];
 
   return (
     <div
@@ -334,8 +409,12 @@ function SlideBox4({ Card }) {
       <div css={slideBoxStyle.moreBtn}>더보기</div>
       <div css={slideBoxStyle.sliderContainer}>
         <Slider {...settings}>
-          {info.map((value, idx) => {
-            return <Card value={value} key={idx} />;
+          {data.map((value, idx) => {
+            return (
+              <div key={idx} onClick={() => goToPosting(value)}>
+                <Card value={value} />
+              </div>
+            );
           })}
         </Slider>
       </div>
@@ -345,6 +424,8 @@ function SlideBox4({ Card }) {
 }
 
 export function Posting() {
+  const [, navigate] = useLocation();
+
   return (
     <div>
       <Header />
@@ -354,10 +435,10 @@ export function Posting() {
           <GreenBox />
         </div>
       </Link>
-      <SlideBox1 Card={Card} />
-      <SlideBox2 Card={Card} />
-      <SlideBox3 Card={Card} />
-      <SlideBox4 Card={Card} />
+      <SlideBox1 Card={Card} goToPosting={goToPosting(navigate)} />
+      <SlideBox2 Card={Card} goToPosting={goToPosting(navigate)} />
+      <SlideBox3 Card={Card} goToPosting={goToPosting(navigate)} />
+      <SlideBox4 Card={Card} goToPosting={goToPosting(navigate)} />
       <div
         css={css`
           margin-bottom: 2rem;
