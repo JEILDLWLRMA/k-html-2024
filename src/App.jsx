@@ -7,6 +7,7 @@ import { Counsel } from "./Counsel.jsx";
 import { PostingOpen } from "./PostingOpen.jsx";
 import { PostingClose } from "./PostingClose.jsx";
 import { PostingReview } from "./PostingReview.jsx";
+import { Posting } from "./posting.jsx";
 
 import { gray5, white } from "./colors.js";
 
@@ -44,6 +45,9 @@ export function App() {
         </Route>
         <Route path={"/posting-review"}>
           <PostingReview />
+        </Route>
+        <Route path={"/posting"}>
+          <Posting />
         </Route>
 
         <Route>404 Not Found {/* @TODO: Change this to real page */}</Route>
