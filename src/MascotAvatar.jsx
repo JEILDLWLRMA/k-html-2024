@@ -14,5 +14,5 @@ const MascotAvatarStyle = {
 }
 
 export function MascotAvatar({ className }) {
-  return <img src={mascot} css={MascotAvatarStyle} className={className} />
+  return <img src={mascot} css={MascotAvatarStyle.img} className={className} />
 }
