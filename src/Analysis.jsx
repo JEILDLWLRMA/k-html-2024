@@ -182,9 +182,8 @@ const AnalysisStyle = {
     
     height: 92%;
     
-    align-self: center;
-    
     @media (min-width: 1024px) {
+      align-self: center;
       width: 60%;
       max-width: 750px;
       height: 85%;
