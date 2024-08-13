@@ -398,10 +398,13 @@ export function Counsel() {
             })
             const { response } = await res.json()
 
-            if (typeof response === 'object') {
-              addMessage({ ai_response: response.content, kind: 'AI' })
-              addMessage({ ai_response: response.jobs_list.join(','), kind: 'AI' })
-            } else {
+            try {
+              const o = JSON.parse(response)
+              if (typeof o === 'object') {
+                addMessage({ ai_response: o.content, kind: 'AI' })
+                addMessage({ ai_response: o.jobs_list.join(','), kind: 'AI' })
+              }
+            } catch {
               addMessage({ ai_response: response, kind: 'AI' })
             }
           }}
