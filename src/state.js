@@ -1,4 +1,4 @@
-import { createContext } from 'react'
+import { createContext, useContext } from 'react'
 
 const persistedState = localStorage.getItem('khtml/global')
 export const stateDefault = {
@@ -16,3 +16,7 @@ export const GlobalState = createContext([
   stateDefault,
   () => {}
 ])
+
+export function useGlobalState() {
+  return useContext(GlobalState)
+}
