@@ -5,6 +5,7 @@ import header from './assets/header.png'
 import rocket from './assets/rocket.png'
 import actions from './assets/actions.png'
 import banner from './assets/banner.png'
+import community from './assets/community.png'
 import { accent, white } from './colors.js'
 
 const CardStyle = {
@@ -72,7 +73,7 @@ const EntryStyle = {
   main: css`
     height: 80%;
     
-    padding: 3rem 1.5rem 0 1.5rem;
+    padding: 1rem 1.5rem 0 1.5rem;
   `,
   titleBox: css`
     display: flex;
@@ -119,6 +120,9 @@ const EntryStyle = {
   
     margin-top: 2rem;
   `,
+  community: css`
+    margin-top: 2rem;
+  `
 }
 
 export function Entry() {
@@ -136,22 +140,23 @@ export function Entry() {
         <ul css={ EntryStyle.actionList}>
           <li css={ EntryStyle.action }>
             <Card
-              icon={ rocket }
+              icon={rocket}
               title='진로 상담'
               description='잘가용에게 진로 상담 받으러 가용'
-              css={ EntryStyle.card }
+              css={EntryStyle.card}
             />
           </li>
-          <li css={ EntryStyle.action }>
+          <li css={EntryStyle.action}>
             <Card
-              icon={ actions }
+              icon={actions}
               title='분석 및 첨삭'
               description='생활기록부 첨삭 및 자기소개서 방향성 제안 받으러 가용'
-              css={ EntryStyle.card }
+              css={EntryStyle.card}
             />
           </li>
         </ul>
         <img src={banner} css={EntryStyle.banner}/>
+        <Card icon={community} title='잘가용 커뮤니티' description='잘가용 커뮤니티에서 견학 기회와 후기를 살펴보러 가용' css={EntryStyle.community} />
       </main>
     </div>
   )
