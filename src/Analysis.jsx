@@ -271,10 +271,9 @@ export function Analysis() {
       credentials: 'same-origin'
     })
 
-    setLoadingStatus(false)
-
     if (response.ok) {
       setResult((await response.json()).answers.replaceAll(/【.*】/g, ''))
+      setLoadingStatus(false)
     } else {
       setError(true)
     }
