@@ -7,6 +7,7 @@ import actions from './assets/actions.png'
 import banner from './assets/banner.png'
 import community from './assets/community.png'
 import { accent, white } from './colors.js'
+import { useLocation } from 'wouter'
 
 const CardStyle = {
   card: css`
@@ -126,6 +127,8 @@ const EntryStyle = {
 }
 
 export function Entry() {
+  const [, navigate] = useLocation()
+
   return (
     <div css={EntryStyle.page}>
       <header css={EntryStyle.header}>
@@ -146,7 +149,7 @@ export function Entry() {
               css={EntryStyle.card}
             />
           </li>
-          <li css={EntryStyle.action}>
+          <li css={EntryStyle.action} onClick={() => navigate('/analysis')}>
             <Card
               icon={actions}
               title='분석 및 첨삭'

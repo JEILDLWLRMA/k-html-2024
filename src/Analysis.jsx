@@ -216,9 +216,10 @@ export function Analysis() {
   const onSubmit = useCallback(async e => {
     setLoadingStatus(true)
 
-    const response = await fetch('/api/upload-pdf', {
+    const response = await fetch('/api/upload-pdf/', {
       method: 'POST',
-      body: new FormData(e.currentTarget)
+      body: new FormData(e.currentTarget),
+      credentials: 'same-origin'
     })
 
     setLoadingStatus(false)
@@ -274,7 +275,7 @@ export function Analysis() {
       <div css={AnalysisStyle.page}>
         <Header/>
         <main css={[AnalysisStyle.main, css`justify-content: end;`]}>
-          {result /* @TODO Render with chat component */}
+          {JSON.stringify(result) /* @TODO Render with chat component */}
           <FileUpload
             key='loaded'
             css={AnalysisStyle.fileInput}
