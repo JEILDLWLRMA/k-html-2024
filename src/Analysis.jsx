@@ -1,9 +1,11 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useState, Children, isValidElement } from 'react'
 import { Link } from 'wouter'
 import { css } from '@emotion/react'
+import { useRemark } from 'react-remark'
 
 import { PuffLoader } from 'react-spinners'
 import { ErrorModal } from './Modal.jsx'
+import { Message } from './Message.jsx'
 
 import home from './assets/home.png'
 import question from './assets/question.png'
@@ -170,11 +172,14 @@ const AnalysisStyle = {
     display: flex;
     flex-direction: column;
   `,
+  header: css`
+    height: 8%;
+  `,
   main: css`
     display: flex;
     flex-direction: column;
     
-    flex-grow: 1;
+    height: 92%;
   `,
   spinnerBox: css`
     display: flex;
@@ -206,12 +211,56 @@ const AnalysisStyle = {
     background-color: ${gray2};
     
     margin: 0 3rem;
+  `,
+  result: css`
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    
+    padding: 2rem 1.2rem;
+    
+    ol, ul {
+      padding-left: 1rem;
+    }
+    
+    height: calc(100% - 3rem);
+    
+    overflow-y:scroll;
   `
+}
+
+function groupPerHeader(nodes) {
+  let header = null;
+  let items = []
+  let groups = []
+
+  for (const node of nodes) {
+    if (isValidElement(node)) {
+      if (typeof node.type === 'string' && node.type.match(/^h\d$/g)) {
+        if (header) {
+          groups.push(items)
+          header = node
+          items = [node]
+        } else {
+          if (items.length !== 0) groups.push(items)
+          header = node
+          items = [node]
+        }
+      } else {
+        items.push(node)
+      }
+    } else {
+      items.push(node)
+    }
+  }
+  if (items.length !== 0) groups.push(items)
+
+  return groups
 }
 
 export function Analysis() {
   const [isLoading, setLoadingStatus] = useState(false)
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useRemark()
   const [error, setError] = useState(false)
   const onSubmit = useCallback(async e => {
     setLoadingStatus(true)
@@ -225,7 +274,7 @@ export function Analysis() {
     setLoadingStatus(false)
 
     if (response.ok) {
-      setResult(await response.json())
+      setResult((await response.json()).answer.replaceAll(/【.*】/g, ''))
     } else {
       setError(true)
     }
@@ -234,7 +283,7 @@ export function Analysis() {
   if (isLoading) {
     return (
       <div css={AnalysisStyle.page}>
-        <Header/>
+        <Header css={AnalysisStyle.header}/>
         <main css={AnalysisStyle.main}>
           <div css={AnalysisStyle.spinnerBox}>
             <PuffLoader/>
@@ -252,7 +301,7 @@ export function Analysis() {
   if (error) {
     return (
       <div css={AnalysisStyle.page}>
-        <Header/>
+        <Header css={AnalysisStyle.header}/>
         <main css={[AnalysisStyle.main, css`justify-content: end;`]}>
           <ErrorModal
             close={() => setError(false)}
@@ -273,9 +322,19 @@ export function Analysis() {
   if (result) {
     return (
       <div css={AnalysisStyle.page}>
-        <Header/>
-        <main css={[AnalysisStyle.main, css`justify-content: end;`]}>
-          {JSON.stringify(result) /* @TODO Render with chat component */}
+        <Header css={AnalysisStyle.header}/>
+        <main css={AnalysisStyle.main}>
+          <div css={AnalysisStyle.result}>
+            {
+              groupPerHeader(Children.toArray(result.props.children)).map((msg, i) => (
+                <Message key={i} css={css`grid-template-columns: 2.8rem 70%;`}>
+                  <div>
+                    {msg}
+                  </div>
+                </Message>
+              ))
+            }
+          </div>
           <FileUpload
             key='loaded'
             css={AnalysisStyle.fileInput}
@@ -288,7 +347,7 @@ export function Analysis() {
 
   return (
     <div css={AnalysisStyle.page}>
-      <Header/>
+      <Header css={AnalysisStyle.header}/>
       <main css={AnalysisStyle.main}>
         <ul css={AnalysisStyle.infoList}>
           <li>

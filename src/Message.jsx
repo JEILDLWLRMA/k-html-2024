@@ -14,9 +14,9 @@ const MessageStyle = {
   `
 }
 
-export function Message({ children }) {
+export function Message({ children, className }) {
   return (
-    <section css={MessageStyle.message}>
+    <section css={MessageStyle.message} className={className}>
       <MascotAvatar css={MessageStyle.sender} />
       {children}
     </section>
