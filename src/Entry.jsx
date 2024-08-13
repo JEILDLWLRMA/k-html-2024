@@ -128,6 +128,11 @@ const EntryStyle = {
   community: css`
     margin-top: 1rem;
   `,
+  slide: css`
+    @media (max-height: 700px) {
+      display: none;
+    }
+  `,
 };
 
 export function Entry() {
@@ -207,7 +212,7 @@ export function Entry() {
             />
           </div>
         </Link>
-        <Slider {...settings2}>
+        <Slider css={EntryStyle.slide} {...settings2}>
           {banners.map((value, idx) => {
             return <img src={value} key={idx} css={EntryStyle.banner} />;
           })}

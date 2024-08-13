@@ -37,6 +37,12 @@ export function App() {
           color: ${white};
           font-family: Pretendard Variable;
         }
+        
+        @media (max-width: 390px) {
+          html {
+            font-size: 14px;
+          }
+        }
       `}/>
       <Switch>
         <Route path="/">
