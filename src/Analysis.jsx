@@ -13,6 +13,7 @@ import wand from './assets/wand.png'
 import attachment from './assets/attachment.png'
 import arrowUp from './assets/arrow-up.png'
 import { accent, gray2, red, purple, blue, gray5, white } from './colors.js'
+import { apiCallMaker } from './apiRoot.js'
 
 const HeaderStyle = {
   header: css`
@@ -265,7 +266,7 @@ export function Analysis() {
   const onSubmit = useCallback(async e => {
     setLoadingStatus(true)
 
-    const response = await fetch('/api/upload-pdf/', {
+    const response = await fetch(apiCallMaker('/api/upload-pdf/'), {
       method: 'POST',
       body: new FormData(e.currentTarget),
       credentials: 'same-origin'
