@@ -398,7 +398,12 @@ export function Counsel() {
             })
             const { response } = await res.json()
 
-            addMessage({ ai_response: response, kind: 'AI' })
+            if (typeof response === 'object') {
+              addMessage({ ai_response: response.content, kind: 'AI' })
+              addMessage({ ai_response: response.jobs_list.join(','), kind: 'AI' })
+            } else {
+              addMessage({ ai_response: response, kind: 'AI' })
+            }
           }}
           css={CounselStyle.input}
           disabled={chatId === null}
