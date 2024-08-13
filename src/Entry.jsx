@@ -128,12 +128,12 @@ export function Entry() {
         <img src={header} css={EntryStyle.headerGraphic} />
       </header>
       <main css={EntryStyle.main}>
-        <div css={ EntryStyle.titleBox }>
-          <MascotAvatar css={ EntryStyle.mascot }/>
-          <h1 css={ EntryStyle.title }>잘가용</h1>
+        <div css={EntryStyle.titleBox}>
+          <MascotAvatar css={EntryStyle.mascot}/>
+          <h1 css={EntryStyle.title}>잘가용</h1>
         </div>
-        <h2 css={ EntryStyle.catchphrase }>당신의 꿈을 향한 여정, 잘가용이 함께합니다.</h2>
-        <ul css={ EntryStyle.actionList }>
+        <h2 css={EntryStyle.catchphrase}>당신의 꿈을 향한 여정, 잘가용이 함께합니다.</h2>
+        <ul css={ EntryStyle.actionList}>
           <li css={ EntryStyle.action }>
             <Card
               icon={ rocket }
