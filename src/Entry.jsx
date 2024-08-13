@@ -5,12 +5,13 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Link } from "wouter";
 
-import header from "./assets/header.png";
-import rocket from "./assets/rocket.png";
-import actions from "./assets/actions.png";
-import banner from "./assets/banner.png";
-import community from "./assets/community.png";
-import { accent, white } from "./colors.js";
+import header from './assets/header.png'
+import rocket from './assets/rocket.png'
+import actions from './assets/actions.png'
+import banner from './assets/banner.png'
+import community from './assets/community.png'
+import { accent, white } from './colors.js'
+import { useLocation } from 'wouter'
 
 const CardStyle = {
   card: css`
@@ -157,6 +158,7 @@ export function Entry() {
     autoplay: true, // 자동 슬라이드 설정
     autoplaySpeed: 2500, // 슬라이드 전환 속도 설정
   };
+  const [, navigate] = useLocation()
 
   return (
     <div css={EntryStyle.page}>

@@ -1,5 +1,6 @@
-import { Switch, Route } from "wouter";
-import { Global, css } from "@emotion/react";
+import { Switch, Route } from 'wouter'
+import { Global, css } from '@emotion/react'
+import { useState } from 'react'
 
 import { Entry } from "./Entry.jsx";
 import { Analysis } from "./Analysis.jsx";
@@ -9,24 +10,34 @@ import { PostingClose } from "./PostingClose.jsx";
 import { PostingReview } from "./PostingReview.jsx";
 import { Posting } from "./posting.jsx";
 
-import { gray5, white } from "./colors.js";
+import { GlobalState, stateDefault } from './state.js'
+
+import { gray5, white } from "./colors.js"
 
 import "./reset.css";
 import "./font.css";
 
 export function App() {
-  return (
-    <>
-      <Global
-        styles={css`
-          body {
-            background-color: ${gray5};
+  const [globalState, setGlobalState] = useState(stateDefault)
 
-            color: ${white};
-            font-family: Pretendard Variable;
-          }
-        `}
-      />
+  return (
+    <GlobalState.Provider
+      value={[
+        globalState,
+        nextState => {
+          localStorage.setItem('khtml/global', JSON.stringify(nextState))
+          setGlobalState(nextState)
+        }
+      ]}
+    >
+      <Global styles={css`
+        body {
+          background-color: ${gray5};
+          
+          color: ${white};
+          font-family: Pretendard Variable;
+        }
+      `}/>
       <Switch>
         <Route path="/">
           <Entry />
@@ -52,6 +63,6 @@ export function App() {
 
         <Route>404 Not Found {/* @TODO: Change this to real page */}</Route>
       </Switch>
-    </>
-  );
+    </GlobalState.Provider>
+  )
 }
