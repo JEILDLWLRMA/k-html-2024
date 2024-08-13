@@ -192,7 +192,7 @@ function Btn() {
     >
       <div css={BtnStyle.box}>
         <img src={heart} css={BtnStyle.image} />
-        <div>다시 열어주세용</div>
+        <div>추천해주세용</div>
       </div>
     </div>
   );

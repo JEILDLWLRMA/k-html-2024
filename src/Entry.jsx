@@ -1,50 +1,54 @@
-import { MascotAvatar } from './MascotAvatar.jsx'
-import { css } from '@emotion/react'
+import { MascotAvatar } from "./MascotAvatar.jsx";
+import { css } from "@emotion/react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import { Link } from "wouter";
 
-import header from './assets/header.png'
-import rocket from './assets/rocket.png'
-import actions from './assets/actions.png'
-import banner from './assets/banner.png'
-import community from './assets/community.png'
-import { accent, white } from './colors.js'
+import header from "./assets/header.png";
+import rocket from "./assets/rocket.png";
+import actions from "./assets/actions.png";
+import banner from "./assets/banner.png";
+import community from "./assets/community.png";
+import { accent, white } from "./colors.js";
 
 const CardStyle = {
   card: css`
     display: grid;
     grid-template-columns: 1.2rem 1fr;
     grid-template-rows: 1.2rem 1fr;
-    grid-template-areas: 
-      'icon title'
-      'description description';
-      
+    grid-template-areas:
+      "icon title"
+      "description description";
+
     align-items: center;
-    
+
     padding: 1rem;
-    
+
     border: 1.5px solid ${white};
     border-radius: 20px;
   `,
   icon: css`
     grid-area: icon;
-    
+
     height: 1.2rem;
     width: 1.2rem;
   `,
   title: css`
     grid-area: title;
-    
+
     font-size: 1.2rem;
-    
+
     margin-left: 0.5rem;
   `,
   description: css`
     grid-area: description;
-    
+
     align-self: start;
-    
+
     margin-top: 1rem;
-  `
-}
+  `,
+};
 
 function Card({ icon, title, description, className }) {
   return (
@@ -53,7 +57,7 @@ function Card({ icon, title, description, className }) {
       <h3 css={CardStyle.title}>{title}</h3>
       <p css={CardStyle.description}>{description}</p>
     </div>
-  )
+  );
 }
 
 const EntryStyle = {
@@ -63,7 +67,7 @@ const EntryStyle = {
   `,
   header: css`
     height: 20%;
-    
+
     overflow-x: hidden;
   `,
   headerGraphic: css`
@@ -72,7 +76,7 @@ const EntryStyle = {
   `,
   main: css`
     height: 80%;
-    
+
     padding: 1rem 1.5rem 0 1.5rem;
   `,
   titleBox: css`
@@ -95,14 +99,14 @@ const EntryStyle = {
     display: flex;
     align-items: stretch;
     gap: 0.8rem;
-  
+
     padding-left: 0;
-    
+
     margin-top: 0.6rem;
-    
+
     list-style-type: none;
   `,
-  action: css`  
+  action: css`
     flex-basis: 0;
     flex-grow: 1;
     flex-shrink: 0;
@@ -114,18 +118,46 @@ const EntryStyle = {
     width: 100%;
     max-height: 30%;
     object-fit: cover;
-    
+
     border: 1.5px solid ${accent};
     border-radius: 20px;
-  
-    margin-top: 2rem;
+
+    margin-top: 1rem;
   `,
   community: css`
-    margin-top: 2rem;
-  `
-}
+    margin-top: 1rem;
+  `,
+};
 
 export function Entry() {
+  const banners = [banner, banner, banner];
+  const catchphrases = [
+    "당신의 꿈을 향한 여정, 잘가용이 함께합니다.",
+    "막막한 진로 고민, 잘가용과 함께 해결하세요.",
+    "미래를 바꾸는 작은 시작, 잘가용과 함께하세요.",
+  ];
+  const settings1 = {
+    dots: false,
+    infinite: true,
+    speed: 1500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    vertical: true,
+    autoplay: true, // 자동 슬라이드 설정
+    autoplaySpeed: 2000, // 슬라이드 전환 속도 설정
+  };
+  const settings2 = {
+    dots: false,
+    infinite: true,
+    speed: 1500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    arrows: false,
+    autoplay: true, // 자동 슬라이드 설정
+    autoplaySpeed: 2500, // 슬라이드 전환 속도 설정
+  };
+
   return (
     <div css={EntryStyle.page}>
       <header css={EntryStyle.header}>
@@ -133,31 +165,52 @@ export function Entry() {
       </header>
       <main css={EntryStyle.main}>
         <div css={EntryStyle.titleBox}>
-          <MascotAvatar css={EntryStyle.mascot}/>
+          <MascotAvatar css={EntryStyle.mascot} />
           <h1 css={EntryStyle.title}>잘가용</h1>
         </div>
-        <h2 css={EntryStyle.catchphrase}>당신의 꿈을 향한 여정, 잘가용이 함께합니다.</h2>
-        <ul css={ EntryStyle.actionList}>
-          <li css={ EntryStyle.action }>
-            <Card
-              icon={rocket}
-              title='진로 상담'
-              description='잘가용에게 진로 상담 받으러 가용'
-              css={EntryStyle.card}
-            />
-          </li>
-          <li css={EntryStyle.action}>
-            <Card
-              icon={actions}
-              title='분석 및 첨삭'
-              description='생활기록부 첨삭 및 자기소개서 방향성 제안 받으러 가용'
-              css={EntryStyle.card}
-            />
-          </li>
+        <Slider {...settings1}>
+          {catchphrases.map((value, index) => {
+            return (
+              <h2 css={EntryStyle.catchphrase} key={index}>
+                {value}
+              </h2>
+            );
+          })}
+        </Slider>
+        <ul css={EntryStyle.actionList}>
+          <Link to="/counsel" asChild>
+            <li css={EntryStyle.action}>
+              <Card icon={rocket} title="진로 상담" description="잘가용에게 진로 상담 받으러 가용" css={EntryStyle.card} />
+            </li>
+          </Link>
+
+          <Link to="/analysis" asChild>
+            <li css={EntryStyle.action}>
+              <Card
+                icon={actions}
+                title="분석 및 첨삭"
+                description="생활기록부 첨삭 및 자기소개서 방향성 제안 받으러 가용"
+                css={EntryStyle.card}
+              />
+            </li>
+          </Link>
         </ul>
-        <img src={banner} css={EntryStyle.banner}/>
-        <Card icon={community} title='잘가용 커뮤니티' description='잘가용 커뮤니티에서 견학 기회와 후기를 살펴보러 가용' css={EntryStyle.community} />
+        <Link to="/community" asChild>
+          <div>
+            <Card
+              icon={community}
+              title="잘가용 커뮤니티"
+              description="잘가용 커뮤니티에서 견학 기회와 후기를 살펴보러 가용"
+              css={EntryStyle.community}
+            />
+          </div>
+        </Link>
+        <Slider {...settings2}>
+          {banners.map((value, idx) => {
+            return <img src={value} key={idx} css={EntryStyle.banner} />;
+          })}
+        </Slider>
       </main>
     </div>
-  )
+  );
 }

@@ -46,7 +46,7 @@ export function App() {
         <Route path={"/posting-review"}>
           <PostingReview />
         </Route>
-        <Route path={"/posting"}>
+        <Route path={"/community"}>
           <Posting />
         </Route>
 

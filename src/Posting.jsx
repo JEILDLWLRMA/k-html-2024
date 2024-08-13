@@ -163,14 +163,16 @@ const cardStyle = {
 
 function Card({ value }) {
   return (
-    <div>
-      <img src={value.titleImg} css={cardStyle.image} />
-      <div css={cardStyle.title}>{value.title}</div>
-      <div css={cardStyle.box}>
-        <div css={cardStyle.detail}>{value.date}</div>
-        <div css={cardStyle.detail}>{value.place}</div>
+    <Link to={value.link} asChild>
+      <div>
+        <img src={value.titleImg} css={cardStyle.image} />
+        <div css={cardStyle.title}>{value.title}</div>
+        <div css={cardStyle.box}>
+          <div css={cardStyle.detail}>{value.date}</div>
+          <div css={cardStyle.detail}>{value.place}</div>
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
 
@@ -205,9 +207,9 @@ function SlideBox1({ Card }) {
     autoplay: true, // 자동 슬라이드 설정
     autoplaySpeed: 1600, // 슬라이드 전환 속도 설정
   };
-  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구" };
-  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구" };
-  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구" };
+  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구", link: "/posting-open" };
+  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
+  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
   const info = [info1, info2, info3];
 
   return (
@@ -242,9 +244,9 @@ function SlideBox2({ Card }) {
     autoplay: true, // 자동 슬라이드 설정
     autoplaySpeed: 2000, // 슬라이드 전환 속도 설정
   };
-  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구" };
-  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구" };
-  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구" };
+  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구", link: "/posting-open" };
+  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
+  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
   const info = [info1, info2, info3];
 
   return (
@@ -279,9 +281,9 @@ function SlideBox3({ Card }) {
     autoplay: true, // 자동 슬라이드 설정
     autoplaySpeed: 1200, // 슬라이드 전환 속도 설정
   };
-  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구" };
-  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구" };
-  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구" };
+  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구", link: "/posting-open" };
+  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
+  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
   const info = [info1, info2, info3];
 
   return (
@@ -316,9 +318,9 @@ function SlideBox4({ Card }) {
     autoplay: true, // 자동 슬라이드 설정
     autoplaySpeed: 2400, // 슬라이드 전환 속도 설정
   };
-  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구" };
-  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구" };
-  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구" };
+  const info1 = { job: "경찰", title: "견학 활동 1", titleImg: banner, date: "2024년 8월 13일", place: "처인구", link: "/posting-open" };
+  const info2 = { job: "경찰", title: "견학 활동 2", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
+  const info3 = { job: "경찰", title: "견학 활동 3", titleImg: banner, date: "2024년 8월 13일", place: "기흥구", link: "/posting-open" };
   const info = [info1, info2, info3];
 
   return (
@@ -347,7 +349,11 @@ export function Posting() {
     <div>
       <Header />
       <Banner />
-      <GreenBox />
+      <Link to="/counsel" asChild>
+        <div>
+          <GreenBox />
+        </div>
+      </Link>
       <SlideBox1 Card={Card} />
       <SlideBox2 Card={Card} />
       <SlideBox3 Card={Card} />
