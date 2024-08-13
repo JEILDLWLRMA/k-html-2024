@@ -1,9 +1,12 @@
 import { Switch, Route } from 'wouter'
 import { Global, css } from '@emotion/react'
+import { useState } from 'react'
 
 import { Entry } from './Entry.jsx'
 import { Analysis } from './Analysis.jsx'
 import { Counsel } from './Counsel.jsx'
+
+import { GlobalState, stateDefault } from './state.js'
 
 import { gray5, white } from './colors.js'
 
@@ -11,8 +14,18 @@ import './reset.css'
 import './font.css'
 
 export function App() {
+  const [globalState, setGlobalState] = useState(stateDefault)
+
   return (
-    <>
+    <GlobalState.Provider
+      value={[
+        globalState,
+        nextState => {
+          localStorage.setItem('khtml/global', JSON.stringify(nextState))
+          setGlobalState(nextState)
+        }
+      ]}
+    >
       <Global styles={css`
         body {
           background-color: ${gray5};
@@ -28,6 +41,6 @@ export function App() {
 
         <Route>404 Not Found {/* @TODO: Change this to real page */}</Route>
       </Switch>
-    </>
+    </GlobalState.Provider>
   )
 }
