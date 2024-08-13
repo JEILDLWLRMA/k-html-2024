@@ -10,6 +10,8 @@ import rocket from './assets/rocket.png'
 import actions from './assets/actions.png'
 import banner from './assets/banner.png'
 import community from './assets/community.png'
+import hi from './assets/hi.png'
+import desktopHeader from './assets/desktop-header.png'
 import { accent, white } from './colors.js'
 import { useLocation } from 'wouter'
 
@@ -128,9 +130,14 @@ const EntryStyle = {
   community: css`
     margin-top: 1rem;
   `,
+  slide: css`
+    @media (max-height: 700px) {
+      display: none;
+    }
+  `,
 };
 
-export function Entry() {
+function EntryMobile({ className }) {
   const banners = [banner, banner, banner];
   const catchphrases = [
     "당신의 꿈을 향한 여정, 잘가용이 함께합니다.",
@@ -161,7 +168,7 @@ export function Entry() {
   const [, navigate] = useLocation()
 
   return (
-    <div css={EntryStyle.page}>
+    <div css={EntryStyle.page} className={className}>
       <header css={EntryStyle.header}>
         <img src={header} css={EntryStyle.headerGraphic} />
       </header>
@@ -207,7 +214,7 @@ export function Entry() {
             />
           </div>
         </Link>
-        <Slider {...settings2}>
+        <Slider css={EntryStyle.slide} {...settings2}>
           {banners.map((value, idx) => {
             return <img src={value} key={idx} css={EntryStyle.banner} />;
           })}
@@ -215,4 +222,138 @@ export function Entry() {
       </main>
     </div>
   );
+}
+
+const EntryDesktopStyle = {
+  page: css`
+    height: 100vh;
+    height: 100dvh;
+    
+    display: flex;
+    flex-direction: column;
+  `,
+  header: css`
+    img {
+      height: 100%;
+      min-width: 100%;
+    }
+  `,
+  main: css`
+    flex-grow: 1;
+    
+    display: grid;
+    grid-template-columns: 30% 70%;
+    
+    overflow: hidden;
+  `,
+  mascot: css`
+    position: relative;
+    bottom: -2rem;
+    align-self: end;
+    
+    object-position: bottom;
+  `,
+  section: css`
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    grid-template-rows: repeat(1fr, 4);
+    grid-template-areas:
+      'headline headline'
+      'info1 banner'
+      'info2 banner'
+      'info3 banner';
+    gap: 1rem;
+      
+    padding: 6rem 0;
+  `,
+  headline: css`
+    grid-area: headline;
+    
+    font-size: 3rem;
+    font-weight: bold;
+    
+    b {
+      color: ${accent};
+      font-size: 4rem;
+    }
+  `,
+  card: css`
+    height: 100%;
+  `,
+  banner: css`
+    grid-area: banner;
+    align-self: stretch;
+    object-fit: cover;
+    
+    border: 1.5px solid ${accent};
+    border-radius: 20px;
+  `,
+}
+
+function EntryDesktop({ className }) {
+  return (
+    <div css={EntryDesktopStyle.page} className={className}>
+      <header css={EntryDesktopStyle.header}>
+        <img src={desktopHeader} />
+      </header>
+      <main css={EntryDesktopStyle.main}>
+        <img css={EntryDesktopStyle.mascot} src={hi} />
+        <section css={ EntryDesktopStyle.section }>
+          <h1 css={ EntryDesktopStyle.headline }>당신의 꿈을 향한 여정, <b>잘가용</b>이 함께합니다.</h1>
+          <Link to="/counsel" asChild>
+            <div css={css`grid-area: info1;`}>
+              <Card
+                icon={ rocket }
+                title="진로 상담"
+                description="잘가용에게 진로 상담 받으러 가용"
+                css={ EntryDesktopStyle.card }
+              />
+            </div>
+          </Link>
+          <img src={ banner } css={ EntryDesktopStyle.banner }/>
+          <Link to="/analysis" asChild>
+            <div css={css`grid-area: info2;`}>
+              <Card
+                icon={ actions }
+                title="분석 및 첨삭"
+                description="생활기록부 첨삭 및 자기소개서 방향성 제안 받으러 가용"
+                css={ EntryDesktopStyle.card }
+              />
+            </div>
+          </Link>
+          <Link to="/community" asChild>
+            <div css={css`grid-area: info3;`}>
+              <Card
+                icon={ community }
+                title="잘가용 커뮤니티"
+                description="잘가용 커뮤니티에서 견학 기회와 후기를 살펴보러 가용"
+                css={ EntryDesktopStyle.card }
+              />
+            </div>
+          </Link>
+        </section>
+      </main>
+    </div>
+  )
+}
+
+export function Entry() {
+  return (
+    <>
+      <EntryMobile css={css`
+        display: none;
+        
+        @media (max-width: 1023px) {
+          display: block;
+        }
+      `} />
+      <EntryDesktop css={css`
+        display: none;
+            
+        @media (min-width: 1024px) {
+          display: block;
+        }
+      `} />
+    </>
+  )
 }

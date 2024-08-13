@@ -181,6 +181,13 @@ const AnalysisStyle = {
     flex-direction: column;
     
     height: 92%;
+    
+    @media (min-width: 1024px) {
+      align-self: center;
+      width: 60%;
+      max-width: 750px;
+      height: 85%;
+    }
   `,
   spinnerBox: css`
     display: flex;
@@ -286,7 +293,10 @@ export function Analysis() {
         <Header css={AnalysisStyle.header}/>
         <main css={AnalysisStyle.main}>
           <div css={AnalysisStyle.spinnerBox}>
-            <PuffLoader/>
+            <PuffLoader
+              color={white}
+              size='6rem'
+            />
           </div>
           <FileUpload
             key='loading'

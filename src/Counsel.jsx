@@ -291,12 +291,23 @@ const CounselStyle = {
     flex-direction: column;
     
     max-height: 92%;
+    
+    @media (min-width: 1024px) {
+      align-self: center;
+      width: 60%;
+      max-width: 750px;
+      height: 85%;
+    }
   `,
   header: css`
     height: 8%;
   `,
   input: css`
     margin: 0 0.6rem 1.2rem 0.6rem;
+    
+    @media (min-width: 1024px) {
+      margin-bottom: 5rem;
+    }
   `,
   messageList: css`   
     flex-grow: 1;
