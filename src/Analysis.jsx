@@ -286,7 +286,10 @@ export function Analysis() {
         <Header css={AnalysisStyle.header}/>
         <main css={AnalysisStyle.main}>
           <div css={AnalysisStyle.spinnerBox}>
-            <PuffLoader/>
+            <PuffLoader
+              color={white}
+              size='6rem'
+            />
           </div>
           <FileUpload
             key='loading'
