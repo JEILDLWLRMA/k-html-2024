@@ -141,7 +141,7 @@ export function Entry() {
         </div>
         <h2 css={EntryStyle.catchphrase}>당신의 꿈을 향한 여정, 잘가용이 함께합니다.</h2>
         <ul css={ EntryStyle.actionList}>
-          <li css={ EntryStyle.action }>
+          <li css={ EntryStyle.action } onClick={() => navigate('/counsel')}>
             <Card
               icon={rocket}
               title='진로 상담'
