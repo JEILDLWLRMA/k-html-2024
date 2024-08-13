@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useReducer, useRef, useState } from "react";
 import { Link } from "wouter";
 import { css } from "@emotion/react";
 import { accent, gray2, gray1, white } from "./colors.js";
@@ -11,6 +11,8 @@ import pencil from "./assets/pencil.png";
 import trash from "./assets/trash.png";
 import arrowUp from './assets/arrow-up.png'
 import { Message } from './Message.jsx'
+import { useGlobalState } from './state.js'
+import { apiCallMaker } from './apiRoot.js'
 
 const HeaderStyle = {
   header: css`
@@ -244,7 +246,9 @@ const FlexibleInputStyle = {
   `
 }
 
-function FlexibleInput({ onSubmit, className }) {
+function FlexibleInput({ onSubmit, className, disabled }) {
+  const inputRef = useRef(null)
+
   return (
     <form
       css={FlexibleInputStyle.box}
@@ -252,10 +256,11 @@ function FlexibleInput({ onSubmit, className }) {
       onSubmit={e => {
         e.preventDefault()
         onSubmit(e)
+        if (inputRef.current) inputRef.current.value = ''
       }}
     >
-      <input required css={FlexibleInputStyle.inputField} />
-      <button css={FlexibleInputStyle.submit}>
+      <input name='textInput' required ref={inputRef} css={FlexibleInputStyle.inputField} />
+      <button css={FlexibleInputStyle.submit} disabled={disabled}>
         <img src={arrowUp} />
       </button>
     </form>
@@ -308,9 +313,23 @@ const CounselStyle = {
 
 export function Counsel() {
   const [sideBar, setSideBar] = useState(false);
+  const [chatId, setChatId] = useState(null)
+  const [messages, addMessage] = useReducer((history, message) => [...history, message], [])
   const handleClickMenu = () => {
     setSideBar(!sideBar);
   };
+
+  useEffect(() => {
+    const abortController = new AbortController()
+
+    fetch(apiCallMaker('/api/create-chat-room/'), {
+      method: 'POST',
+      credentials: 'same-origin',
+      signal: abortController.signal
+    }).then(res => res.json()).then(({ room_id }) => setChatId(room_id))
+
+    return () => abortController.abort()
+  }, [])
 
   return (
     <div
@@ -326,15 +345,53 @@ export function Counsel() {
       <main css={CounselStyle.main}>
         {sideBar && <SlideBar MenuBox={MenuBox} />}
         <div css={CounselStyle.messageList}>
-          <Message><p>안녕하세요!</p></Message>
-          <UserMessage css={css`width: 70%; align-self: end;`}><p>안녕하세용</p></UserMessage>
-          <Message><p>조금 긴 메시지입니다.</p></Message>
-          <UserMessage css={css`width: 70%; align-self: end;`}><p>저도 긴 메시지입니다.</p></UserMessage>
-          <Message><p>아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다.</p></Message>
-          <Message><p>아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다.</p></Message>
-          <Message><p>아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다. 아주 긴 메시지입니다.</p></Message>
+          {
+            messages.map(({ ai_response = null, user_ask = null, kind }, i) => {
+              if (kind === 'AI') {
+                return (
+                  <Message key={i}>
+                    <p>
+                      {ai_response}
+                    </p>
+                  </Message>
+                )
+              } else {
+                return (
+                  <UserMessage key={i}>
+                    <p>
+                      {user_ask}
+                    </p>
+                  </UserMessage>
+                )
+              }
+            })
+          }
         </div>
-        <FlexibleInput css={CounselStyle.input} />
+        <FlexibleInput
+          onSubmit={async e => {
+            const msg = (new FormData(e.currentTarget)).get('textInput')
+            const sentData = new FormData()
+
+            sentData.set('room_id',chatId)
+            sentData.set('message', msg)
+
+            addMessage({ user_ask: msg, kind: 'USER' })
+
+            const res = await fetch(apiCallMaker('/api/send-message/'), {
+              method: 'POST',
+              body: new URLSearchParams(sentData),
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              credentials: 'same-origin'
+            })
+            const { response } = await res.json()
+
+            addMessage({ ai_response: response, kind: 'AI' })
+          }}
+          css={CounselStyle.input}
+          disabled={chatId === null}
+        />
       </main>
     </div>
   );
