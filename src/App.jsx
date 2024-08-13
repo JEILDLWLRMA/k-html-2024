@@ -2,6 +2,7 @@ import { Switch, Route } from 'wouter'
 import { Global, css } from '@emotion/react'
 
 import { Entry } from './Entry.jsx'
+import { Analysis } from './Analysis.jsx'
 
 import { gray5, white } from './colors.js'
 
@@ -21,6 +22,7 @@ export function App() {
       `}/>
       <Switch>
         <Route path='/'><Entry /></Route>
+        <Route path='/analysis'><Analysis /></Route>
 
         <Route>404 Not Found {/* @TODO: Change this to real page */}</Route>
       </Switch>
