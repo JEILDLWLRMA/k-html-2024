@@ -11,6 +11,11 @@
 
 <br/>
 
+# 📚 발표 자료
+[재원이 맥북 고치기 팀 ppt](https://github.com/user-attachments/files/17182839/_.pptx)
+
+
+
 # 🌟 구현 화면
 
 ### 🖥️ Web
@@ -38,6 +43,12 @@
     <td><img src="https://github.com/user-attachments/assets/dd9858f1-04e9-4028-b4d5-a14e440dcc49" width=300 height=600></td>
   </tr>
 </table>
+
+---
+
+### 🤖 AI
+Baseline : Polygot-7.5B & Open AI GPT-4o mini
+Fine-Tuned w. AI Hub 진로 상담 데이터셋
 
 <br/>
 
